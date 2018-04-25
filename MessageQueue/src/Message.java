@@ -12,17 +12,10 @@ public class Message {
 	public int getPriority() {
 		return priority;
 	}
- 
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
 
 	public int getArrival() {
 		return arrival;
 	}
 
-	public void setArrival(int arrival) {
-		this.arrival = arrival;
-	}
 	
 }
