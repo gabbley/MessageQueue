@@ -49,31 +49,19 @@ public class MessagePriorityQueue {
 	}
 
 	public static void soManyMessages() {
-		ArrayList<Message> messages = new ArrayList<Message>();
-		for (int i = 0; i < MESSAGE_NUM; i++) {
-			messages.add(new Message((int) (Math.random() * 5), ((int) Math.random() * 20)));
-		}
-		System.out.println("soManyMessages()");
-
-	}
-
-
-	public static void processMessage() {
-		for (int i = 0; i < qs.size(); i++) {
-			Queue<Message> queueMessage = qs.get(i);
-			for (int j = 0; j < queueMessage.size(); j++) {
-				assignQueue(queueMessage.peek());
-				soManyMessages();
-				messages.add(queueMessage.remove());
-			}
+	for (int i = 0; i < MESSAGE_NUM; i++) {
+			messages.add(new Message((int)(Math.random() * 5), (int)(Math.random() * 20)));
+			//messages.add(new Message(1, 1));
 		}
 	}
 	
 	public static void main(String[] args) {
 		qs = new ArrayList<Queue<Message>>();
+		messages = new ArrayList<Message>();
 		fillArr();
-		processMessage();
-		System.out.println(qs);
+		soManyMessages();
+		for (int i = 0; i<messages.size(); i++){
+			assignQueue(messages.get(i));
+		}
 	}
-
 }
