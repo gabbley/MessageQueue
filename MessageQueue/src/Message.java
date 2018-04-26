@@ -8,6 +8,7 @@ public class Message {
 
 	private int priority;
 	private int arrival;
+	private int wait;
 	
 	/**
 	 * Constructor for Message
@@ -22,6 +23,7 @@ public class Message {
 	public Message(int p, int arr){
 		priority = p;
 		arrival = arr;
+		wait = arr;
 	}
 
 	/**
@@ -44,8 +46,30 @@ public class Message {
 		return arrival;
 	}
 	
+	/**
+	 * getter for waiting time of message
+	 * 
+	 * @return int wait
+	 *
+	 */
+	public int getWait() {
+		return wait;
+	}
+	
+	/**
+	 * setter for waiting time of message
+	 * 
+	 * param w
+	 * 		wait time
+	 *
+	 */
+	public void incWait() {
+		wait++;
+	}
+	
+	
 	public String toString(){
-		return "priority: " + priority + "\narrival: " + arrival;
+		return "priority: " + priority + "\narrival: " + arrival + "\nwait: " + wait;
 	}
 
 	
