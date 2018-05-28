@@ -10,11 +10,17 @@ import java.util.Queue;
 public class MessagePriorityQueue {
 
 	private static ArrayList<Queue<Message>> qs;
-	private static ArrayList<Message> messages;
 	private static ArrayList<Message> processedMessages;
+	private static int time;
 
 	final static int MESSAGE_NUM = 15;
+	final static int QUEUE_NUM = 5;
 	final static int LIMIT = 10000;
+
+	MessagePriorityQueue() {
+		fillArr();
+		time = 0;
+	}
 
 	/**
 	 * Assigns messages to queues based on priority
@@ -23,7 +29,7 @@ public class MessagePriorityQueue {
 	 *            Message to be added to its respective queue
 	 *
 	 */
-	public static void assignQueue(Message m) {
+	public static void add(Message m) {
 		int p = m.getPriority();
 		switch (p) {
 		case 0:
@@ -50,17 +56,9 @@ public class MessagePriorityQueue {
 	 * Fills array with 5 queues for each priority
 	 */
 	public static void fillArr() {
-		Queue<Message> q1 = new LinkedList<Message>();
-		Queue<Message> q2 = new LinkedList<Message>();
-		Queue<Message> q3 = new LinkedList<Message>();
-		Queue<Message> q4 = new LinkedList<Message>();
-		Queue<Message> q5 = new LinkedList<Message>();
-
-		qs.add(q1);
-		qs.add(q2);
-		qs.add(q3);
-		qs.add(q4);
-		qs.add(q5);
+		for (int i = 0; i < QUEUE_NUM; i++) {
+			qs.add(new LinkedList<Message>());
+		}
 	}
 
 	/**
@@ -68,32 +66,37 @@ public class MessagePriorityQueue {
 	 *
 	 */
 	public static void processMessage() {
-		int time = 0;
 		for (time = 0; time < MESSAGE_NUM; time++) { // add 15 messages
-			assignQueue(new Message((int) (Math.random() * 5), time));
+			add(new Message((int) (Math.random() * 5), time));
 		}
 
-		for (; time < LIMIT; time++) {
-			assignQueue(new Message((int) (Math.random() * 5), time));
-		}
+		int wait = 0;
 
 		// iterate through queues
 		// until the queues are empty
+		int i = 0;
 
-		for (int i = 0; i < qs.size(); i++) {
-			Queue<Message> q = qs.get(i); // check if empty
-			if (!q.isEmpty()) {
-				Message m = q.peek();
-				System.out.println(m);
-				if (time - m.getArrival() >= 4) {
+		for (; time < LIMIT; time++) {
+
+			Queue<Message> q = qs.get(i); // check if empty, each of the 5 queues
+
+			if (!q.isEmpty()) { //until the end of each queue
+				Message m = q.peek(); //highest priority message
+				wait = time - m.getArrival();
+				if (wait >= 4) {
 					processedMessages.add(q.remove());
+					m.setWait(wait++);
+					System.out.println(m);
 					System.out.println("added to processed msg\n");
-					m.incWait();
+					add(new Message((int) (Math.random() * 5), time));
 				}
+				if (i < 4)
+					i++;
 			}
+
 		}
 
-		while (!allEmpty()) {
+		while (!isEmpty()) {
 			for (Queue<Message> q : qs)
 				if (!q.isEmpty())
 					q.remove();
@@ -106,7 +109,7 @@ public class MessagePriorityQueue {
 	 * 
 	 * @return boolean true if queues are empty, false otherwise
 	 */
-	public static boolean allEmpty() {
+	public static boolean isEmpty() {
 		boolean b = true;
 		for (Queue<Message> q : qs) {
 			if (!q.isEmpty()) {
@@ -127,15 +130,16 @@ public class MessagePriorityQueue {
 		for (Message m : processedMessages)
 			time += m.getWait();
 
+		System.out.println(processedMessages.size());
 		return time / processedMessages.size();
 	}
 
 	public static void main(String[] args) {
 		qs = new ArrayList<Queue<Message>>();
-		messages = new ArrayList<Message>();
 		processedMessages = new ArrayList<Message>();
 		fillArr();
 		processMessage();
 		System.out.println(waitTime());
+		System.out.println(processedMessages);
 	}
 }

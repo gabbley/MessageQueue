@@ -23,7 +23,7 @@ public class Message {
 	public Message(int p, int arr){
 		priority = p;
 		arrival = arr;
-		wait = arr;
+		wait = 0;
 	}
 
 	/**
@@ -56,16 +56,18 @@ public class Message {
 		return wait;
 	}
 	
+	
 	/**
 	 * setter for waiting time of message
 	 * 
-	 * param w
-	 * 		wait time
+	 * @param w
+	 * 		waiting time
 	 *
 	 */
-	public void incWait() {
-		wait++;
+	public void setWait(int w) {
+		wait = w;
 	}
+	
 	
 	
 	public String toString(){
