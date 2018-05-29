@@ -61,10 +61,16 @@ public class MessagePriorityQueue {
 		}
 	}
 
+	
+	
 	/**
 	 * Processes messages and orders them based on priority and arrival time
 	 *
 	 */
+//	
+//	public static void processMessage(){
+//		
+//	}
 	public static void processMessage() {
 		for (time = 0; time < MESSAGE_NUM; time++) { // add 15 messages
 			add(new Message((int) (Math.random() * 5), time));
@@ -78,18 +84,20 @@ public class MessagePriorityQueue {
 
 		for (; time < LIMIT; time++) {
 
-			Queue<Message> q = qs.get(i); // check if empty, each of the 5 queues
+			Queue<Message> q = qs.get(i); // check if empty, each of the 5
+											// queues
 
-			if (!q.isEmpty()) { //until the end of each queue
-				Message m = q.peek(); //highest priority message
+			if (!q.isEmpty()) { // until the end of each queue
+				Message m = q.peek(); // highest priority message
 				wait = time - m.getArrival();
 				if (wait >= 4) {
 					processedMessages.add(q.remove());
-					m.setWait(wait++);
+					m.incWait();
 					System.out.println(m);
 					System.out.println("added to processed msg\n");
 					add(new Message((int) (Math.random() * 5), time));
 				}
+	
 				if (i < 4)
 					i++;
 			}
@@ -97,9 +105,13 @@ public class MessagePriorityQueue {
 		}
 
 		while (!isEmpty()) {
-			for (Queue<Message> q : qs)
-				if (!q.isEmpty())
+			for (Queue<Message> q : qs) {
+				if (!q.isEmpty()){
+					q.peek().incWait();
+					processedMessages.add(q.peek());
 					q.remove();
+				}
+			}
 		}
 
 	}
@@ -130,7 +142,7 @@ public class MessagePriorityQueue {
 		for (Message m : processedMessages)
 			time += m.getWait();
 
-		System.out.println(processedMessages.size());
+		//System.out.println(processedMessages.size());
 		return time / processedMessages.size();
 	}
 
@@ -139,7 +151,11 @@ public class MessagePriorityQueue {
 		processedMessages = new ArrayList<Message>();
 		fillArr();
 		processMessage();
-		System.out.println(waitTime());
-		System.out.println(processedMessages);
+//		System.out.println(waitTime());
+//		System.out.println(processedMessages);
+		
+		for (Message m : processedMessages)
+			System.out.println(m);
 	}
 }
+

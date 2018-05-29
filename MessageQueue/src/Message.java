@@ -68,6 +68,16 @@ public class Message {
 		wait = w;
 	}
 	
+	/**
+	 * setter for waiting time of message
+	 * 
+
+	 *
+	 */
+	public void incWait() {
+		wait++;
+	}
+	
 	
 	
 	public String toString(){
